@@ -1,0 +1,50 @@
+/* ================= 模块四 · 反馈、运行与健康数据（适老化字号） ================= */
+
+/* ---------- 19 晨间反馈 ---------- */
+.fb-caption { font-size: 16px; color: var(--ink-2); margin-bottom: 6px; }
+.fb-q { font-size: 23px; font-weight: 800; margin-bottom: 14px; }
+.fb-link {
+  display: block; margin: 14px auto 0; text-align: center;
+  color: var(--teal-d); font-size: 16px; font-weight: 600;
+}
+
+/* ---------- 20 连接健康设备 ---------- */
+.dev-status { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.dev-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--teal-l); color: var(--teal-d); display: flex; align-items: center; justify-content: center; }
+.dev-state { font-size: 16px; font-weight: 700; color: var(--teal-d); }
+.dev-title { font-size: var(--fs-section); font-weight: 700; margin-bottom: 4px; }
+.dev-desc { font-size: 16px; color: var(--ink-2); line-height: 1.7; margin-bottom: 14px; }
+.dev-rows { background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow); overflow: hidden; margin-top: 12px; }
+
+/* ---------- 21 睡眠与健康数据 ---------- */
+.hd-block { background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 14px 16px; margin-bottom: 12px; }
+.hd-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.hd-title { font-size: 18px; font-weight: 700; flex: 1; }
+.hd-line { font-size: 17px; line-height: 1.7; }
+.hd-line b { font-weight: 700; }
+.hd-sub { font-size: 15px; color: var(--ink-3); margin-top: 6px; }
+
+/* ---------- 22 私密医疗记录 ---------- */
+.med-tag-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: var(--teal-d); }
+.med-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+.med-desc { font-size: 16px; color: var(--ink-2); line-height: 1.7; margin-bottom: 14px; }
+
+/* ---------- 23 运行与播放 ---------- */
+.pb-title { font-size: 21px; font-weight: 800; margin: 8px 0 4px; }
+.pb-desc { font-size: 16px; color: var(--ink-2); line-height: 1.7; }
+.pb-actions { display: flex; align-items: center; gap: 14px; margin-top: 16px; }
+/* 23 播放情况 */
+.pb-seg { display: flex; gap: 10px; margin-top: 14px; }
+.pb-block {
+  background: #fff; border-radius: var(--r-md); box-shadow: var(--shadow);
+  padding: 14px 16px; margin-top: 12px;
+}
+.pb-block-title { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
+.pb-line { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 16px; padding: 5px 0; }
+.pb-p { font-size: 15px; color: var(--ink-2); line-height: 1.8; }
+.pb-note { font-size: 15px; color: var(--ink-3); line-height: 1.8; margin-top: 14px; }
+
+/* ---------- 24 数据与授权管理 ---------- */
+.dm-title { font-size: var(--fs-section); font-weight: 700; }
+.dm-desc { font-size: 16px; color: var(--ink-2); margin: 4px 0 14px; }
+.dm-actions { display: flex; gap: 12px; margin-bottom: 14px; }

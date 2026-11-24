@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>小伴前端 · 本周进展</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: #e9e2d2;
+    color: #29231a;
+    display: flex;
+    justify-content: center;
+    padding: 26px;
+  }
+  .card {
+    width: 920px;
+    background: #fcf7ec;
+    border-radius: 24px;
+    box-shadow: 0 14px 60px rgba(60, 45, 20, 0.20);
+    padding: 40px 44px 36px;
+  }
+  /* ---------- 头部 ---------- */
+  header { display: flex; align-items: flex-end; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .logo {
+    width: 52px; height: 52px; border-radius: 16px;
+    background: linear-gradient(145deg, #f2a65a, #e8862c);
+    color: #fff; font-size: 24px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 16px rgba(232, 134, 44, 0.4);
+  }
+  h1 { font-size: 26px; font-weight: 800; letter-spacing: 0.5px; }
+  .sub { font-size: 13px; color: #a79d8c; margin-top: 5px; }
+  .week { text-align: right; }
+  .week .tag {
+    display: inline-block; background: #fdf3e3; color: #c96a10;
+    font-size: 13px; font-weight: 700; padding: 5px 14px; border-radius: 999px;
+  }
+  .week .date { font-size: 13px; color: #6f6759; margin-top: 8px; }
+  /* ---------- 章节 ---------- */
+  section {
+    margin-top: 26px; background: #fff; border-radius: 18px;
+    padding: 24px 26px 26px; box-shadow: 0 2px 10px rgba(96, 74, 38, 0.08);
+  }
+  h2 { font-size: 19px; font-weight: 800; display: flex; align-items: center; gap: 12px; }
+  h2 .bar { width: 6px; height: 22px; border-radius: 4px; background: #e8862c; flex: none; }
+  h2 .meta { margin-left: auto; font-size: 12px; color: #a79d8c; font-weight: 600; }
+  .body { margin-top: 16px; }
+  /* 模块网格 */
+  .mods { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .mod {
+    background: #fcf7ec; border-radius: 14px; padding: 16px 18px 15px;
+    border-left: 5px solid #e8862c;
+  }
+  .mod.p2 { border-left-color: #7b5cff; }
+  .mod.p3 { border-left-color: #12a180; }
+  .mod.p4 { border-left-color: #d97b1f; }
+  .mod b { font-size: 15.5px; }
+  .mod .pages { float: right; font-size: 12px; color: #c96a10; background: #fdf3e3; border-radius: 999px; padding: 3px 10px; font-weight: 700; }
+  .mod p { font-size: 13px; color: #6f6759; line-height: 1.85; margin-top: 7px; clear: both; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <header>
+      <div class="brand">
+        <div class="logo">伴</div>
+        <div>
+          <h1>前端进展 · 本周简述</h1>
+          <div class="sub">老年陪伴应用「小伴」 前端 v0.2 ｜ Figma 设计稿还原</div>
+        </div>
+      </div>
+      <div class="week">
+        <div class="tag">2026 第 45 周</div>
+        <div class="date">11.02 — 11.08</div>
+      </div>
+    </header>
+
+    <section>
+      <h2><span class="bar"></span>设计稿实现与优化<span class="meta">Vite 8 · React 19 · TypeScript · React Router</span></h2>
+      <div class="body mods">
+        <div class="mod"><span class="pages">6 页</span><b>基础体验</b><p>首页待机 / 聆听动效、语音聊天（可对话）、陪伴档案、记忆列表、设置</p></div>
+        <div class="mod p2"><span class="pages">6 页</span><b>助眠流程与偏好</b><p>健康中心、三步助眠引导（监测 → 故事 → 白噪音）、当晚需求、助眠偏好</p></div>
+        <div class="mod p3"><span class="pages">6 页</span><b>个性化与逐项授权</b><p>称呼 / 兴趣 / 聊天风格、逐项授权确认、记忆详情确认与更正</p></div>
+        <div class="mod p4"><span class="pages">6 页</span><b>反馈、运行与健康数据</b><p>晨间反馈、设备连接、睡眠与健康数据、私密医疗记录、播放与数据管理</p></div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

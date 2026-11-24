@@ -1,0 +1,89 @@
+/* ================= 模块二 · 助眠（适老化字号） ================= */
+
+/* ---------- 07 健康中心 ---------- */
+.sleep-hero {
+  border-radius: var(--r-lg); padding: 16px 18px; color: #fff;
+  background: linear-gradient(135deg, #17b593, #0d8f70);
+  box-shadow: 0 6px 18px rgba(18, 161, 128, 0.35);
+  display: flex; align-items: center; gap: 14px;
+}
+.sleep-hero-icon {
+  width: 48px; height: 48px; border-radius: 50%; background: rgba(255, 255, 255, 0.18);
+  display: flex; align-items: center; justify-content: center; flex: none;
+}
+.sleep-hero-title { font-size: 20px; font-weight: 700; }
+.sleep-hero-sub { font-size: 15px; opacity: 0.92; margin-top: 4px; line-height: 1.5; }
+.sleep-hero-btn {
+  margin-left: auto; flex: none; height: 46px; padding: 0 18px; border-radius: 12px;
+  background: #fff; color: var(--teal-d); font-size: 15px; font-weight: 700;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* ---------- 08/09/10 助眠三步 ---------- */
+.sleep-caption { font-size: 15px; color: var(--purple-d); font-weight: 700; margin-bottom: 6px; }
+.sleep-q { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+.sleep-desc { font-size: 17px; color: var(--ink-2); }
+.sleep-actions { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
+.sleep-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px 16px; font-size: 16px;
+}
+.sleep-bottom .link { font-weight: 600; color: var(--purple-d); padding: 8px 10px; }
+.sleep-bottom .link.red { color: var(--red); }
+.sleep-playing { display: flex; align-items: center; gap: 6px; color: var(--ink-2); font-size: 15px; }
+.sleep-playing i { width: 8px; height: 8px; border-radius: 50%; background: var(--purple); }
+
+.story-card {
+  background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow);
+  padding: 16px 18px; display: flex; align-items: center; gap: 14px; margin-top: 12px;
+}
+.story-icon {
+  width: 50px; height: 50px; border-radius: 14px; background: var(--purple-l); color: var(--purple-d);
+  display: flex; align-items: center; justify-content: center; flex: none;
+}
+.story-title { font-size: 19px; font-weight: 700; }
+.story-sub { font-size: 15px; color: var(--ink-3); margin-top: 3px; }
+.story-side { margin-left: auto; display: flex; flex-direction: column; gap: 8px; align-items: stretch; }
+
+.noise-timer { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+
+/* ---------- 11 当晚需求 ---------- */
+.tonight-q { font-size: 22px; font-weight: 800; margin-bottom: 12px; }
+.tonight-note { text-align: center; margin-top: 12px; }
+.stop-text {
+  display: block; margin: 12px auto 0; color: var(--red); font-size: 16px; font-weight: 600;
+}
+
+/* ---------- 场景卡（09 / 10 / 11 共用） ---------- */
+.scene-card {
+  background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow);
+  padding: 14px 16px; margin-top: 12px;
+}
+.scene-head { display: flex; align-items: center; gap: 10px; }
+.scene-name { font-size: 23px; font-weight: 800; flex: 1; min-width: 0; }
+.scene-comp { font-size: 17px; font-weight: 700; margin-top: 10px; }
+.scene-sub { font-size: 16px; color: var(--ink-2); margin-top: 4px; }
+.scene-actions { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.scene-row {
+  display: flex; align-items: center; gap: 10px; padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+}
+.scene-row:last-child { border-bottom: none; }
+.scene-row-main { font-size: 17px; font-weight: 600; flex: 1; min-width: 0; }
+.scene-row-link { color: var(--purple-d); font-size: 16px; font-weight: 600; flex: none; }
+.scene-volume { display: flex; align-items: center; gap: 10px; padding: 8px 0 2px; font-size: 17px; font-weight: 600; }
+.vol-btn {
+  width: 30px; height: 30px; border-radius: 50%; background: var(--purple-l); color: var(--purple-d);
+  font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex: none;
+}
+.scene-rate { display: flex; gap: 8px; margin-top: 10px; }
+.scene-block {
+  background: #fff; border-radius: var(--r-md); box-shadow: var(--shadow);
+  padding: 13px 16px; margin-top: 10px;
+}
+.scene-block-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 17px; }
+.scene-block p { font-size: 15px; color: var(--ink-2); line-height: 1.7; margin-top: 6px; }
+
+/* ---------- 12 助眠偏好 ---------- */
+.prefs-section { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.prefs-label { font-size: var(--fs-section); font-weight: 700; }
