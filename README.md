@@ -35,6 +35,31 @@ npm run dev      # 开发预览，页面目录可直达全部 24 页
 npm run build    # 生产构建（tsc + vite）
 ```
 
+## 语音服务对接（HAPIC）
+
+语音对话由语音组同学的 [ShenSetius/HAPIC](https://github.com/ShenSetius/HAPIC) 本地服务提供（Letta Agent + DeepSeek，后续含 Qwen TTS 语音合成）。
+
+```
+前端 fetch('/hapic/*') ──vite 代理──▶ http://127.0.0.1:4173/api/*（HAPIC 本地服务）
+```
+
+**启动对方服务**（详见其仓库 docs/operations/LOCAL_VOICE.md）：克隆后 `npm ci`，复制 `.env.example` 为 `.env.local` 填写模型配置，执行 `npm run voice:local`（默认 `127.0.0.1:4173`）。
+
+**已对接端点**（适配层 `src/api/hapic.ts`）：
+
+| HAPIC 端点 | 用途 |
+| --- | --- |
+| `GET /api/session` | 取会话令牌（`x-hapic-session` 头） |
+| `POST /api/text` | 一轮文字对话，同步返回小伴回复 |
+| `GET /api/messages` | 拉取真实会话历史（自动过滤系统消息） |
+| `GET /api/status` | TTS / 语音能力状态 |
+
+**自动回退**：服务在线时聊天记录页展示真实对话与"语音服务已连接"；检测不到服务时自动切换到本地演示模式（示例话术），汇报、离线开发不受影响。
+
+**本地联调桩**：`npm run stub:hapic` 在本机 4173 端口启动一个同协议的模拟服务，用于无对方环境时验证前端链路。
+
+浏览器音频播放（Qwen TTS 启用后走 `GET /api/voice/browser-output/*`）已在适配层预留，待语音组开启 `HAPIC_QWEN_TTS_ENABLED=1` 后接通。
+
 ## 说明
 
 当前为设计验证原型：数据均为 Mock，语音、设备监测、记忆学习等功能为接口预留，后续接入真实后端。设计稿见 Figma「前端v0.2」。

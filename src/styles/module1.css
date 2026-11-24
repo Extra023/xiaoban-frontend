@@ -151,3 +151,13 @@
 .bubble-tag { display: block; font-size: 15px; color: var(--ink-3); margin-top: 4px; }
 .bubble-user { background: transparent; box-shadow: none; font-size: 16px; padding: 8px 4px; }
 .chat-hint { text-align: center; font-size: 15px; color: var(--ink-3); line-height: 1.8; margin-top: auto; padding-top: 8px; }
+
+/* 文字交流输入栏（对接 HAPIC 语音服务） */
+.chat-link { text-align: center; font-size: 14px; color: var(--ink-3); padding: 6px 0 8px; }
+.chat-link.on { color: var(--teal, #0f766e); font-weight: 600; }
+.chat-inputbar { display: flex; gap: 10px; padding: 0 2px 2px; }
+.chat-input { flex: 1; min-width: 0; height: 52px; border-radius: 14px; border: 2px solid var(--orange-l2); background: #fff; padding: 0 16px; font-size: 18px; color: var(--ink, #29231a); outline: none; }
+.chat-input:focus { border-color: var(--orange); }
+.chat-input::placeholder { color: var(--ink-3); }
+.chat-send { flex: none; width: 96px; height: 52px; font-size: 18px; border-radius: 14px; }
+.chat-send:disabled { opacity: 0.5; }

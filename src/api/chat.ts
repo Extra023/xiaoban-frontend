@@ -1,5 +1,6 @@
 import { registerMock, request } from './client'
 import { db } from './db'
+import { isHapicOnline, listMessages as hapicListMessages, sendTextTurn } from './hapic'
 import type { ChatMessage } from './types'
 
 registerMock('GET', '/chat/messages', () => db.chat.messages)
@@ -18,13 +19,28 @@ registerMock('POST', '/chat/messages/assistant', (body) => {
   return msg
 })
 
-/** 消息列表 */
-export function getMessages(): Promise<ChatMessage[]> {
+/** 消息列表（HAPIC 语音服务在线时返回真实会话历史，否则返回本地示例） */
+export async function getMessages(): Promise<ChatMessage[]> {
+  if (await isHapicOnline()) {
+    try {
+      return await hapicListMessages()
+    } catch {
+      /* 回落本地 Mock */
+    }
+  }
   return request('GET', '/chat/messages')
 }
 
 /** 最近一条交流（陪伴主页「最近的交流」预览） */
-export function getLatestMessage(): Promise<ChatMessage | null> {
+export async function getLatestMessage(): Promise<ChatMessage | null> {
+  if (await isHapicOnline()) {
+    try {
+      const list = await hapicListMessages()
+      return list[list.length - 1] ?? null
+    } catch {
+      /* 回落本地 Mock */
+    }
+  }
   return request('GET', '/chat/latest')
 }
 
@@ -41,6 +57,20 @@ export function sendMessage(text: string): Promise<ChatMessage> {
 /** 推送一条小伴回复（真实后端为流式推送，此处预留一次性返回） */
 export function pushAssistantReply(text: string): Promise<ChatMessage> {
   return request('POST', '/chat/messages/assistant', { text })
+}
+
+/**
+ * 发送一轮真实对话（HAPIC 语音服务在线时）。
+ * 返回小伴的回复文本；服务不在线返回 null，由调用方走本地示例回复。
+ */
+export async function sendTextTurnOnline(text: string): Promise<string | null> {
+  if (!(await isHapicOnline())) return null
+  try {
+    const r = await sendTextTurn(text)
+    return r.assistantText
+  } catch {
+    return null
+  }
 }
 
 /** 预置的示例回复（接入 LLM 服务后由后端生成） */

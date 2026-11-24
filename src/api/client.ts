@@ -57,6 +57,10 @@
  *   GET    /api/playback/state
  *   POST   /api/playback/stop-all
  *   GET    /api/data/overview
+ *
+ * 语音服务（HAPIC）另行走 /hapic 代理：
+ *   前端 /hapic/* → vite 代理 → 127.0.0.1:4173/api/*（见 vite.config.ts、
+ *   api/hapic.ts；适配 ShenSetius/HAPIC 本地语音服务，含自动回退）
  * ---------------------------------------------------------- */
 
 export const USE_MOCK = true
