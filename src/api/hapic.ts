@@ -92,20 +92,33 @@ export async function sendTextTurn(text: string): Promise<{ conversationId: stri
   }, TURN_TIMEOUT_MS)
 }
 
-interface HapicMessage {
+interface HapicTimelineMessage {
   id: string
+  role?: string
   text: string
-  /** HAPIC 消息流为助手输出（不含用户消息），无 role 字段 */
+  /** timeline 消息用 occurredAt（ISO 字符串）；旧格式为 createdAt */
+  occurredAt?: string
   createdAt?: string | number
 }
 
-/** GET /api/messages：拉取真实会话历史（HAPIC 该端点返回小伴的回复消息） */
+function toTimestamp(value: string | number | undefined): number {
+  if (typeof value === 'number') return value
+  if (typeof value === 'string') return Date.parse(value) || 0
+  return 0
+}
+
+/**
+ * GET /api/timeline?stream=conversation：完整对话时间线（含用户与小伴双方消息）。
+ * HAPIC 的 /api/messages 只返回助手输出，双方对话要用 timeline 端点。
+ */
 export async function listMessages(): Promise<ChatMessage[]> {
-  const r = await hapicFetch<{ messages: HapicMessage[] }>('/messages')
-  return r.messages.map((m) => ({
-    id: String(m.id),
-    role: 'assistant' as const,
-    text: m.text,
-    createdAt: typeof m.createdAt === 'string' ? Date.parse(m.createdAt) || 0 : (m.createdAt ?? 0),
-  }))
+  const r = await hapicFetch<{ messages: HapicTimelineMessage[] }>('/timeline?stream=conversation&limit=50')
+  return r.messages
+    .filter((m) => m.role === 'user' || m.role === 'assistant')
+    .map((m) => ({
+      id: String(m.id),
+      role: m.role as ChatMessage['role'],
+      text: m.text,
+      createdAt: toTimestamp(m.occurredAt ?? m.createdAt),
+    }))
 }
