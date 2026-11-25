@@ -61,16 +61,14 @@ export function pushAssistantReply(text: string): Promise<ChatMessage> {
 
 /**
  * 发送一轮真实对话（HAPIC 语音服务在线时）。
- * 返回小伴的回复文本；服务不在线返回 null，由调用方走本地示例回复。
+ * 返回小伴的回复文本；服务不在线返回 null（调用方走本地示例回复）；
+ * 在线但本轮失败时抛错（调用方提示"没听清"）。
  */
 export async function sendTextTurnOnline(text: string): Promise<string | null> {
   if (!(await isHapicOnline())) return null
-  try {
-    const r = await sendTextTurn(text)
-    return r.assistantText
-  } catch {
-    return null
-  }
+  const r = await sendTextTurn(text)
+  if (!r.assistantText) throw new Error('empty assistant reply')
+  return r.assistantText
 }
 
 /** 预置的示例回复（接入 LLM 服务后由后端生成） */

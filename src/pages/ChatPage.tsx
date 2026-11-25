@@ -30,15 +30,26 @@ export default function ChatPage() {
     if (!text || sending) return
     setSending(true)
     try {
-      const reply = await sendTextTurnOnline(text)
+      let reply: string | null = null
+      let failed = false
+      try {
+        reply = await sendTextTurnOnline(text)
+      } catch {
+        failed = true
+      }
       if (reply != null) {
         // 真实服务：重新拉取会话历史（含双方消息）
         setMessages(await getMessages())
-      } else {
+      } else if (!failed) {
         // 本地演示：用户消息 + 示例回复
         const userMsg = await sendMessage(text)
         const replyText = SAMPLE_REPLIES[text] ?? FALLBACK_REPLY
         const aiMsg = await pushAssistantReply(replyText)
+        setMessages((prev) => [...prev, userMsg, aiMsg])
+      } else {
+        // 服务在线但本轮失败（如模型暂不可用）：提示重说
+        const userMsg = await sendMessage(text)
+        const aiMsg = await pushAssistantReply('小伴这会儿有点没听清，请再说一次。')
         setMessages((prev) => [...prev, userMsg, aiMsg])
       }
       setInput('')
