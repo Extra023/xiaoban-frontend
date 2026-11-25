@@ -58,6 +58,8 @@ npm run build    # 生产构建（tsc + vite）
 
 **本地联调桩**：`npm run stub:hapic` 在本机 4173 端口启动一个同协议的模拟服务，用于无对方环境时验证前端链路。
 
+**助眠音频素材**：`public/audio/rain-loop.mp3`（自然雨声）、`forest-rain.mp3`（森林夜雨）来自 [Mixkit](https://mixkit.co)（Mixkit License：免费可商用、无需署名）；`white.wav` 等由 `scripts/gen-sleep-audio.mjs` 本地程序化生成。
+
 浏览器音频播放（Qwen TTS 启用后走 `GET /api/voice/browser-output/*`）已在适配层预留，待语音组开启 `HAPIC_QWEN_TTS_ENABLED=1` 后接通。
 
 ## 说明

@@ -1,9 +1,16 @@
-/* 助眠音频引擎：程序化氛围音（本地 WAV 循环）+ 故事语音朗读（浏览器内置 TTS） */
+/* 助眠音频引擎：真实氛围音（Mixkit 录音）+ 程序化生成音 + 故事语音朗读 */
 
 let ambience: HTMLAudioElement | null = null
 let volume = 0.3
 
-export type AmbienceKind = 'rain' | 'white' | 'pink'
+export type AmbienceKind = 'rain' | 'forest' | 'white'
+
+/** 场景清单：真实录音来自 Mixkit（Mixkit License，免费可商用、无需署名） */
+export const AMBIENCE_SCENES: Record<AmbienceKind, { src: string; label: string }> = {
+  rain: { src: '/audio/rain-loop.mp3', label: '自然雨声' },
+  forest: { src: '/audio/forest-rain.mp3', label: '森林夜雨' },
+  white: { src: '/audio/white.wav', label: '舒缓白噪音' },
+}
 
 /** 《灯笼花园》睡前故事稿（温和慢节奏，约 2 分钟） */
 export const LANTERN_STORY = `灯笼花园。
@@ -44,7 +51,7 @@ export function resumeAmbience(): void {
 /** 循环播放氛围音 */
 export function playAmbience(kind: AmbienceKind): void {
   stopAmbience()
-  const el = new Audio(`/audio/${kind}.wav`)
+  const el = new Audio(AMBIENCE_SCENES[kind].src)
   el.loop = true
   el.volume = volume
   void el.play().catch(() => undefined)
