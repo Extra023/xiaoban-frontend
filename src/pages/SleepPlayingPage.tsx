@@ -3,17 +3,17 @@ import { useNavigate } from 'react-router-dom'
 import { TopBar } from '../components/ui'
 import { Head, Block, Row, BlockBtn, BottomBar } from '../components/blocks'
 import {
-  getVolume, narrateStory, pauseAmbience, pauseNarration,
-  playAmbience, resumeAmbience, resumeNarration, setVolume, stopAll,
+  getVolume, pauseAmbience,
+  playAmbience, resumeAmbience, setVolume, stopAll,
 } from '../audio/sleepAudio'
 
-/** 09 正在播放（真实音频：本地生成雨声 + 浏览器朗读《灯笼花园》故事） */
+/** 09 正在播放（舒缓白噪音，循环播放） */
 export default function SleepPlayingPage() {
   const navigate = useNavigate()
   const [started, setStarted] = useState(false)
   const [playing, setPlaying] = useState(false)
   const [vol, setVol] = useState(Math.round(getVolume() * 100))
-  const [bgOn, setBgOn] = useState(true)
+  const [soundOn, setSoundOn] = useState(true)
   const [minutesLeft, setMinutesLeft] = useState<number | null>(null)
   const timerRef = useRef<number | undefined>(undefined)
 
@@ -23,8 +23,7 @@ export default function SleepPlayingPage() {
   }, [])
 
   function start() {
-    if (bgOn) playAmbience('rain')
-    narrateStory()
+    if (soundOn) playAmbience('white')
     setStarted(true)
     setPlaying(true)
   }
@@ -33,11 +32,9 @@ export default function SleepPlayingPage() {
     if (!started) return start()
     if (playing) {
       pauseAmbience()
-      pauseNarration()
       setPlaying(false)
     } else {
       resumeAmbience()
-      resumeNarration()
       setPlaying(true)
     }
   }
@@ -69,11 +66,11 @@ export default function SleepPlayingPage() {
     }, 60000)
   }
 
-  function toggleBackground() {
-    setBgOn((on) => {
+  function toggleSound() {
+    setSoundOn((on) => {
       const next = !on
       if (started && playing) {
-        if (next) playAmbience('rain')
+        if (next) playAmbience('white')
         else pauseAmbience()
       }
       return next
@@ -96,7 +93,7 @@ export default function SleepPlayingPage() {
     <div className="page">
       <TopBar title="正在播放" backTo="/sleep/pick" tone="purple" />
       <div className="page-body scroll">
-        <Block title="灯笼花园 + 轻柔雨声">
+        <Block title="舒缓白噪音">
           <div className="blk-note">{statusText}</div>
         </Block>
         {!started && (
@@ -125,11 +122,11 @@ export default function SleepPlayingPage() {
           <Row title="收藏此场景" sub="仅作偏好线索，不自动长期保存" action="收藏" tone="purple" />
           <Row title="换个内容" action="选择" tone="purple" onClick={() => navigate('/sleep/swap')} />
           <Row
-            title="单独关闭背景"
-            sub={bgOn ? '只关轻柔雨声，保留故事' : '背景声已关闭'}
-            action={bgOn ? '关闭' : '开启'}
+            title="关闭声音"
+            sub={soundOn ? '暂停白噪音，需要时再开启' : '声音已关闭'}
+            action={soundOn ? '关闭' : '开启'}
             tone="purple"
-            onClick={toggleBackground}
+            onClick={toggleSound}
           />
           <Row title="自己搭配" sub="调整引导、故事与背景的顺序" action="调整" tone="purple" />
         </Block>

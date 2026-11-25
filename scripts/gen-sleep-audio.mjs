@@ -40,6 +40,20 @@ function brownNoise(leak = 0.02) {
   return b
 }
 
+// 舒缓白噪音：白噪声经低通柔化（去掉刺耳高频）+ 呼吸式缓慢起伏
+function soothingWhite() {
+  const b = new Float32Array(N)
+  let lp = 0
+  const alpha = 0.055 // 一阶低通系数，约 800Hz 截止：保留柔和气流感，去掉嘶声
+  for (let i = 0; i < N; i++) {
+    lp += alpha * ((rand() * 2 - 1) - lp)
+    // 14 秒一个呼吸周期：0.82 → 1.0 缓慢起伏
+    const breathe = 0.82 + 0.18 * (0.5 + 0.5 * Math.sin((i / SR) * 2 * Math.PI / 14))
+    b[i] = lp * breathe * 2.2
+  }
+  return b
+}
+
 // 粉噪音：Paul Kellet 近似，频谱柔和
 function pinkNoise() {
   const b = new Float32Array(N)
@@ -101,7 +115,7 @@ function toWav(b) {
 
 const assets = {
   'rain.wav': normalize(rainNoise()),
-  'white.wav': normalize(whiteNoise(), 0.5),
+  'white.wav': normalize(soothingWhite(), 0.7),
   'pink.wav': normalize(pinkNoise()),
 }
 for (const [name, buf] of Object.entries(assets)) {
