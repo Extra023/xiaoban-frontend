@@ -14,14 +14,15 @@ import type { ChatMessage } from './types'
 
 const BASE = '/hapic'
 const TIMEOUT_MS = 2500
+const TURN_TIMEOUT_MS = 30000
 
 let sessionToken: string | null = null
 let onlineCache: { at: number; value: boolean } = { at: 0, value: false }
 
-async function hapicFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
+async function hapicFetch<T>(path: string, init: RequestInit = {}, timeoutMs = TIMEOUT_MS): Promise<T> {
   const token = await ensureSession()
   const ctrl = new AbortController()
-  const t = window.setTimeout(() => ctrl.abort(), TIMEOUT_MS)
+  const t = window.setTimeout(() => ctrl.abort(), timeoutMs)
   try {
     const res = await fetch(`${BASE}${path}`, {
       ...init,
@@ -88,25 +89,23 @@ export async function sendTextTurn(text: string): Promise<{ conversationId: stri
   return hapicFetch<{ conversationId: string; assistantText: string }>('/text', {
     method: 'POST',
     body: JSON.stringify({ text }),
-  })
+  }, TURN_TIMEOUT_MS)
 }
 
 interface HapicMessage {
   id: string
-  role: string
   text: string
-  createdAt?: number
+  /** HAPIC 消息流为助手输出（不含用户消息），无 role 字段 */
+  createdAt?: string | number
 }
 
-/** GET /api/messages：拉取真实会话历史（含用户与小伴双方消息） */
+/** GET /api/messages：拉取真实会话历史（HAPIC 该端点返回小伴的回复消息） */
 export async function listMessages(): Promise<ChatMessage[]> {
   const r = await hapicFetch<{ messages: HapicMessage[] }>('/messages')
-  return r.messages
-    .filter((m) => m.role === 'user' || m.role === 'assistant')
-    .map((m) => ({
-      id: String(m.id),
-      role: m.role as ChatMessage['role'],
-      text: m.text,
-      createdAt: m.createdAt ?? 0,
-    }))
+  return r.messages.map((m) => ({
+    id: String(m.id),
+    role: 'assistant' as const,
+    text: m.text,
+    createdAt: typeof m.createdAt === 'string' ? Date.parse(m.createdAt) || 0 : (m.createdAt ?? 0),
+  }))
 }
