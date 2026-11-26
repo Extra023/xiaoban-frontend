@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { getMessages, pushAssistantReply, sendMessage, sendTextTurnOnline } from '../api/chat'
 import { isHapicOnline } from '../api/hapic'
 import { FALLBACK_REPLY, SAMPLE_REPLIES } from '../api/chat'
+import { isSpeechInputSupported, startSpeechSession } from '../audio/speechInput'
 import type { ChatMessage } from '../api/types'
 import { TopBar } from '../components/ui'
 import { Icon } from '../components/Icon'
@@ -13,11 +14,19 @@ export default function ChatPage() {
   const [online, setOnline] = useState<boolean | null>(null)
   const [input, setInput] = useState('')
   const [sending, setSending] = useState(false)
+  const [listening, setListening] = useState(false)
+  const [voiceHint, setVoiceHint] = useState<string | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const stopSpeechRef = useRef<(() => void) | null>(null)
+  const hintTimerRef = useRef<number | undefined>(undefined)
 
   useEffect(() => {
     getMessages().then(setMessages)
     isHapicOnline().then(setOnline)
+    return () => {
+      stopSpeechRef.current?.()
+      window.clearTimeout(hintTimerRef.current)
+    }
   }, [])
 
   useEffect(() => {
@@ -25,8 +34,42 @@ export default function ChatPage() {
     if (el) el.scrollTop = el.scrollHeight
   }, [messages])
 
-  async function send() {
-    const text = input.trim()
+  function showVoiceHint(text: string, ms = 4000) {
+    setVoiceHint(text)
+    window.clearTimeout(hintTimerRef.current)
+    hintTimerRef.current = window.setTimeout(() => setVoiceHint(null), ms)
+  }
+
+  function toggleListen() {
+    if (listening) {
+      stopSpeechRef.current?.()
+      stopSpeechRef.current = null
+      setListening(false)
+      return
+    }
+    if (!isSpeechInputSupported()) {
+      showVoiceHint('当前浏览器不支持语音输入，请打字')
+      return
+    }
+    setListening(true)
+    showVoiceHint('正在聆听，请说话…', 60000)
+    stopSpeechRef.current = startSpeechSession({
+      onInterim: (text) => setInput(text),
+      onFinal: (text) => {
+        setInput(text)
+        void send(text)
+      },
+      onError: (message) => showVoiceHint(message),
+      onEnd: () => {
+        setListening(false)
+        stopSpeechRef.current = null
+        setVoiceHint((h) => (h === '正在聆听，请说话…' ? null : h))
+      },
+    })
+  }
+
+  async function send(override?: string) {
+    const text = (override ?? input).trim()
     if (!text || sending) return
     setSending(true)
     try {
@@ -93,14 +136,22 @@ export default function ChatPage() {
             <div key={m.id} className="bubble-user">{m.text}</div>
           ))}
         </div>
-        <div className={`chat-link${online ? ' on' : ''}`}>
-          {online == null ? '正在检测语音服务…' : online ? '语音服务已连接 · 小伴实时回复' : '语音服务未连接 · 本地演示模式'}
+        <div className={`chat-link${online ? ' on' : ''}${voiceHint ? ' hint' : ''}`}>
+          {voiceHint ?? (online == null ? '正在检测语音服务…' : online ? '语音服务已连接 · 小伴实时回复' : '语音服务未连接 · 本地演示模式')}
         </div>
         <div className="chat-inputbar">
+          <button
+            className={`chat-mic${listening ? ' listening' : ''}`}
+            onClick={toggleListen}
+            aria-label={listening ? '停止语音输入' : '语音输入'}
+            aria-pressed={listening}
+          >
+            <Icon name="mic" size={22} strokeWidth={2} />
+          </button>
           <input
             className="chat-input"
             value={input}
-            placeholder="打字和小伴说话…"
+            placeholder={listening ? '正在聆听，请说话…' : '打字或点麦克风和小伴说话…'}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') void send() }}
           />

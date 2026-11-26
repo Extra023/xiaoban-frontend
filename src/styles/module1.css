@@ -161,3 +161,10 @@
 .chat-input::placeholder { color: var(--ink-3); }
 .chat-send { flex: none; width: 96px; height: 52px; font-size: 18px; border-radius: 14px; }
 .chat-send:disabled { opacity: 0.5; }
+
+/* 语音输入按钮（麦克风） */
+.chat-mic { flex: none; width: 52px; height: 52px; border-radius: 14px; border: 2px solid var(--orange-l2); background: #fff; color: var(--orange-d); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; }
+.chat-mic:active { transform: scale(0.94); }
+.chat-mic.listening { background: var(--orange); color: #fff; border-color: var(--orange); animation: micPulse 1.4s ease-in-out infinite; }
+.chat-link.hint { color: var(--orange-d); font-weight: 600; }
+@keyframes micPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(154, 52, 18, 0.35); } 50% { box-shadow: 0 0 0 8px rgba(154, 52, 18, 0); } }

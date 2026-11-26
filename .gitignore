@@ -28,3 +28,6 @@ dist-ssr
 .tmp-*
 *.tsbuildinfo
 *.lnk
+add-hosts.ps1
+do-hosts.ps1
+hosts-check.txt
